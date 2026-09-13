@@ -502,7 +502,6 @@ export function HomePage() {
             {STATS.map(([label, value, suffix]) => <div key={label}><span>{label}</span><strong>{value}</strong><small>{suffix}</small></div>)}
           </div>
         </div>
-        <div className="about-visual"><figure className="about-image"><img src="/projects/varshavsky-kitchen-island.jpg" alt="ЖК Варшавський — кухня з мармуровим островом, теплим дубом та панорамним видом на місто" /></figure><figure className="about-inset"><img src="/projects/varshavsky-dining.jpg" alt="ЖК Варшавський — обідня зона з теплим деревом, зеленими кріслами та природним світлом" /></figure></div>
       </section>
       <div className="service-marquee" aria-label="Напрямки роботи"><div>Ремонти під ключ · Дизайн інтерʼєру · Будівництво · Авторський нагляд · Контроль якості · Комплектація матеріалами · Кошториси без сюрпризів · Ремонти під ключ · Дизайн інтерʼєру · Будівництво ·</div></div>
       <section className="services-section page-section">
