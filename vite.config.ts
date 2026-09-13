@@ -21,6 +21,7 @@ const QUANTA_ICONS_SHIM = fileURLToPath(
 
 export default defineConfig(({ mode, command }) => {
   const designInspectorEnabled = process.env.HF_DESIGN_INSPECTOR === "1" || mode === "design";
+  const githubPages = process.env.VITE_GITHUB_PAGES === "true";
 
   return {
     resolve: {
@@ -76,6 +77,9 @@ export default defineConfig(({ mode, command }) => {
       // inside effects/handlers, or guarded with `typeof window !== "undefined"`.
       tanstackStart({
         server: { entry: "server" },
+        // Pages is static hosting, so emit standalone HTML for every public
+        // route only during the Pages workflow.
+        ...(githubPages ? { prerender: { enabled: true, crawlLinks: true } } : {}),
       }),
       higgsfieldDesignInspectorVitePlugin(designInspectorEnabled),
       react({
