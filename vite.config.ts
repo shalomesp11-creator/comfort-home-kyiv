@@ -24,6 +24,13 @@ export default defineConfig(({ mode, command }) => {
   const githubPages = process.env.VITE_GITHUB_PAGES === "true";
 
   return {
+    // Deliberately NOT setting Vite's `base` for the GitHub Pages build: it
+    // also feeds the SSR/prerender internal server's own route matching
+    // (same coupling as `tanstackStart({ router: { basepath } })` — see the
+    // comment on that plugin call below), and prerendering `/` 404s against
+    // an internal server that now expects every request prefixed. The
+    // GitHub Pages prefix is patched into the built output afterward — see
+    // scripts/prepare-github-pages.mjs.
     resolve: {
       alias: [{ find: /^@higgsfield-ai\/icons(\/.*)?$/, replacement: QUANTA_ICONS_SHIM }],
     },
@@ -79,6 +86,18 @@ export default defineConfig(({ mode, command }) => {
         server: { entry: "server" },
         // Pages is static hosting, so emit standalone HTML for every public
         // route only during the Pages workflow.
+        //
+        // Deliberately NOT setting `router.basepath` here: tried it, and it
+        // makes prerender's own "/" request redirect-loop and fail (the
+        // internal preview server mounted at that basepath never settles
+        // between the bare and trailing-slash form of the root). Prerendering
+        // stays basepath-agnostic (server/router run at `/`); the GitHub
+        // Pages prefix is patched into the built output afterward — see
+        // scripts/prepare-github-pages.mjs, which also fixes up the client
+        // bundle's hydration basepath (TanStack Start's `hydrateStart` calls
+        // `router.update({ basepath: process.env.TSS_ROUTER_BASEPATH })`,
+        // which is "" here, so left unpatched the client 404s after hydrating
+        // since it never learns the page is served under `/comfort-home-kyiv`).
         ...(githubPages ? { prerender: { enabled: true, crawlLinks: true } } : {}),
       }),
       higgsfieldDesignInspectorVitePlugin(designInspectorEnabled),
