@@ -9,43 +9,18 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
-import { Route as RobotsDottxtRouteImport } from './routes/robots[.]txt'
-import { Route as RemontyRouteImport } from './routes/remonty'
-import { Route as PortfolioRouteImport } from './routes/portfolio'
-import { Route as KontaktyRouteImport } from './routes/kontakty'
-import { Route as DyzainRouteImport } from './routes/dyzain'
-import { Route as BudivnytstvoRouteImport } from './routes/budivnytstvo'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as BudivnytstvoRouteImport } from './routes/budivnytstvo'
+import { Route as DyzainRouteImport } from './routes/dyzain'
+import { Route as KontaktyRouteImport } from './routes/kontakty'
+import { Route as PortfolioRouteImport } from './routes/portfolio'
+import { Route as RemontyRouteImport } from './routes/remonty'
+import { Route as RobotsDottxtRouteImport } from './routes/robots[.]txt'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 
-const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
-  id: '/sitemap.xml',
-  path: '/sitemap.xml',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const RobotsDottxtRoute = RobotsDottxtRouteImport.update({
-  id: '/robots.txt',
-  path: '/robots.txt',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const RemontyRoute = RemontyRouteImport.update({
-  id: '/remonty',
-  path: '/remonty',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PortfolioRoute = PortfolioRouteImport.update({
-  id: '/portfolio',
-  path: '/portfolio',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const KontaktyRoute = KontaktyRouteImport.update({
-  id: '/kontakty',
-  path: '/kontakty',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DyzainRoute = DyzainRouteImport.update({
-  id: '/dyzain',
-  path: '/dyzain',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BudivnytstvoRoute = BudivnytstvoRouteImport.update({
@@ -53,9 +28,34 @@ const BudivnytstvoRoute = BudivnytstvoRouteImport.update({
   path: '/budivnytstvo',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const DyzainRoute = DyzainRouteImport.update({
+  id: '/dyzain',
+  path: '/dyzain',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const KontaktyRoute = KontaktyRouteImport.update({
+  id: '/kontakty',
+  path: '/kontakty',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PortfolioRoute = PortfolioRouteImport.update({
+  id: '/portfolio',
+  path: '/portfolio',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RemontyRoute = RemontyRouteImport.update({
+  id: '/remonty',
+  path: '/remonty',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RobotsDottxtRoute = RobotsDottxtRouteImport.update({
+  id: '/robots.txt',
+  path: '/robots.txt',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
 
@@ -136,46 +136,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/sitemap.xml': {
-      id: '/sitemap.xml'
-      path: '/sitemap.xml'
-      fullPath: '/sitemap.xml'
-      preLoaderRoute: typeof SitemapDotxmlRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/robots.txt': {
-      id: '/robots.txt'
-      path: '/robots.txt'
-      fullPath: '/robots.txt'
-      preLoaderRoute: typeof RobotsDottxtRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/remonty': {
-      id: '/remonty'
-      path: '/remonty'
-      fullPath: '/remonty'
-      preLoaderRoute: typeof RemontyRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/portfolio': {
-      id: '/portfolio'
-      path: '/portfolio'
-      fullPath: '/portfolio'
-      preLoaderRoute: typeof PortfolioRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/kontakty': {
-      id: '/kontakty'
-      path: '/kontakty'
-      fullPath: '/kontakty'
-      preLoaderRoute: typeof KontaktyRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/dyzain': {
-      id: '/dyzain'
-      path: '/dyzain'
-      fullPath: '/dyzain'
-      preLoaderRoute: typeof DyzainRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/budivnytstvo': {
@@ -185,11 +150,46 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BudivnytstvoRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/dyzain': {
+      id: '/dyzain'
+      path: '/dyzain'
+      fullPath: '/dyzain'
+      preLoaderRoute: typeof DyzainRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/kontakty': {
+      id: '/kontakty'
+      path: '/kontakty'
+      fullPath: '/kontakty'
+      preLoaderRoute: typeof KontaktyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/portfolio': {
+      id: '/portfolio'
+      path: '/portfolio'
+      fullPath: '/portfolio'
+      preLoaderRoute: typeof PortfolioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/remonty': {
+      id: '/remonty'
+      path: '/remonty'
+      fullPath: '/remonty'
+      preLoaderRoute: typeof RemontyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/robots.txt': {
+      id: '/robots.txt'
+      path: '/robots.txt'
+      fullPath: '/robots.txt'
+      preLoaderRoute: typeof RobotsDottxtRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
