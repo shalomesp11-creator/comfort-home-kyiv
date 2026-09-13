@@ -1,0 +1,13 @@
+{
+  "name": "COMFORT HOME — Ремонти під ключ",
+  "short_name": "COMFORT HOME",
+  "description": "Ремонт квартир і будинків під ключ, дизайн інтерʼєру та будівництво.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FAF5ED",
+  "theme_color": "#211D1A",
+  "lang": "uk",
+  "icons": [
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}
