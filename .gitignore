@@ -26,6 +26,8 @@ temp/
 .env
 .env.*
 !.env.example
+VV.txt
+vv.txt
 *.pem
 *.key
 *.pfx

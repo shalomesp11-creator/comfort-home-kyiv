@@ -22,6 +22,7 @@ const QUANTA_ICONS_SHIM = fileURLToPath(
 export default defineConfig(({ mode, command }) => {
   const designInspectorEnabled = process.env.HF_DESIGN_INSPECTOR === "1" || mode === "design";
   const githubPages = process.env.VITE_GITHUB_PAGES === "true";
+  const netlify = process.env.NETLIFY === "true";
 
   return {
     // Deliberately NOT setting Vite's `base` for the GitHub Pages build: it
@@ -98,7 +99,7 @@ export default defineConfig(({ mode, command }) => {
         // `router.update({ basepath: process.env.TSS_ROUTER_BASEPATH })`,
         // which is "" here, so left unpatched the client 404s after hydrating
         // since it never learns the page is served under `/comfort-home-kyiv`).
-        ...(githubPages ? { prerender: { enabled: true, crawlLinks: true } } : {}),
+        ...(githubPages || netlify ? { prerender: { enabled: true, crawlLinks: true } } : {}),
       }),
       higgsfieldDesignInspectorVitePlugin(designInspectorEnabled),
       react({

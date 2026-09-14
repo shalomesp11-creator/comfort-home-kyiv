@@ -114,12 +114,16 @@ function Wordmark({ dark = false }: { dark?: boolean }) {
 function LeadModal({ open, initialService, onClose }: { open: boolean; initialService: string; onClose: () => void }) {
   const panelRef = useRef<HTMLDivElement>(null);
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const [phoneError, setPhoneError] = useState("");
+  const [submitError, setSubmitError] = useState("");
 
   useEffect(() => {
     if (!open) return;
     setSubmitted(false);
+    setSubmitting(false);
     setPhoneError("");
+    setSubmitError("");
     const previous = document.activeElement instanceof HTMLElement ? document.activeElement : null;
     const panel = panelRef.current;
     const first = panel?.querySelector<HTMLElement>("input, select, textarea, button");
@@ -150,16 +154,43 @@ function LeadModal({ open, initialService, onClose }: { open: boolean; initialSe
     };
   }, [open, onClose]);
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
+    if (submitting) return;
+
+    const form = event.currentTarget;
+    const data = new FormData(form);
     const phone = String(data.get("phone") ?? "").replace(/[^\d+]/g, "");
     if (phone.replace(/\D/g, "").length < 10) {
       setPhoneError("Вкажіть, будь ласка, повний номер телефону.");
       return;
     }
     setPhoneError("");
-    setSubmitted(true);
+    setSubmitError("");
+    setSubmitting(true);
+
+    try {
+      const response = await fetch("/.netlify/functions/lead", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          name: String(data.get("name") ?? ""),
+          phone,
+          service: String(data.get("service") ?? ""),
+          comment: String(data.get("comment") ?? ""),
+          source: window.location.href,
+          website: String(data.get("website") ?? ""),
+        }),
+      });
+
+      if (!response.ok) throw new Error("Lead delivery failed");
+      setSubmitted(true);
+      form.reset();
+    } catch {
+      setSubmitError("Не вдалося надіслати заявку. Спробуйте ще раз або зателефонуйте нам.");
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   if (!open) return null;
@@ -177,15 +208,16 @@ function LeadModal({ open, initialService, onClose }: { open: boolean; initialSe
         {submitted ? (
           <div className="lead-success" role="status">
             <span className="lead-success-number">01</span>
-            <h2 id="lead-title">Форма готова.</h2>
-            <p>Дані перевірені. Надсилання заявки буде активоване на фінальному етапі після підключення Telegram.</p>
+            <h2 id="lead-title">Заявку надіслано.</h2>
+            <p>Дякуємо! Ми отримали ваші контакти та звʼяжемося з вами протягом робочого дня.</p>
             <button className="lead-success-action" type="button" onClick={onClose}>Повернутися на сайт <Arrow /></button>
           </div>
         ) : (
           <form className="lead-form" onSubmit={handleSubmit} noValidate>
             <p className="section-kicker">Коротко про ваш проєкт</p>
             <h2 id="lead-title">Готові обговорити простір?</h2>
-            <p className="lead-form-intro">Залиште контакти та кілька деталей. Після підключення Telegram заявка одразу надходитиме команді.</p>
+            <p className="lead-form-intro">Залиште контакти та кілька деталей. Заявка одразу надійде нашій команді.</p>
+            <input className="lead-honeypot" name="website" type="text" tabIndex={-1} autoComplete="off" aria-hidden="true" />
             <div className="lead-form-grid">
               <label className="lead-field">
                 <span>Імʼя</span>
@@ -209,8 +241,10 @@ function LeadModal({ open, initialService, onClose }: { open: boolean; initialSe
               </label>
             </div>
             <div className="lead-form-footer">
-              <p>Натискаючи «Надіслати», ви погоджуєтесь з обробкою персональних даних.</p>
-              <button className="lead-submit" type="submit">Надіслати заявку <Arrow /></button>
+              <p>{submitError || "Натискаючи «Надіслати», ви погоджуєтесь з обробкою персональних даних."}</p>
+              <button className="lead-submit" type="submit" disabled={submitting} aria-busy={submitting}>
+                {submitting ? "Надсилаємо…" : "Надіслати заявку"} <Arrow />
+              </button>
             </div>
           </form>
         )}
